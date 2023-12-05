@@ -1,0 +1,28 @@
+spin_manifest_version = 2
+
+[application]
+name = "balloon"
+version = "0.1.0"
+authors = ["Seungjin Kim <seungjin@duck.com>"]
+description = ""
+
+[[trigger.http]]
+route = "/..."
+component = "static"
+
+[component.static]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+files = [{ source = "assets", destination = "/" }]
+
+[[trigger.http]]
+route = "/data"
+component = "xmas2023"
+
+[component.xmas2023]
+source = "target/wasm32-wasi/release/xmas2023.wasm"
+allowed_outbound_hosts = []
+key_value_stores = ["default"]
+[component.xmas2023.build]
+command = "cargo build --target wasm32-wasi --release"
+workdir = "xmas2023"
+watch = ["src/**/*.rs", "Cargo.toml"]
